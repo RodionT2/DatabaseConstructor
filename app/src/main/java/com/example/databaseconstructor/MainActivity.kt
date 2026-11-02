@@ -52,15 +52,78 @@ fun DatabaseHomeScreen() {
 
             Button(
                 onClick = { showDialog = true },
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Создать базу данных")
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-
+            if (databases.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("У вас пока нет баз данных")
+                }
+            } else {
+                LazyColumn {
+                    items(databases) { database ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 5.dp)
+                        ) {
+                            Text(
+                                text = database,
+                                modifier = Modifier.padding(20.dp)
+                            )
+                        }
+                    }
+                }
+            }
         }
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showDialog = false
+            },
+            title = {
+                Text("Новая база данных")
+            },
+            text = {
+                OutlinedTextField(
+                    value = databaseName,
+                    onValueChange = { databaseName = it },
+                    label = { Text("Название базы")},
+                    singleLine = true
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        if (databaseName.isNotBlank()) {
+                            databases.add(databaseName.trim())
+                            databaseName = ""
+                            showDialog = false
+                        }
+                    }
+                ) {
+                    Text("Создать")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDialog = false
+                    }
+                ) {
+                    Text("Отмена")
+                }
+            }
+        )
     }
 }
 
