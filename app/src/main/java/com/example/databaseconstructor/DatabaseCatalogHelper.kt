@@ -1,3 +1,5 @@
+// Вспомогательный каталог для БД
+
 package com.example.databaseconstructor
 
 import android.content.ContentValues

@@ -1,3 +1,5 @@
+// Экран для БД
+
 package com.example.databaseconstructor
 
 import androidx.compose.foundation.layout.*
