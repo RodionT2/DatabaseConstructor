@@ -12,8 +12,8 @@ data class DatabaseInfo(
     val fileName: String
 )
 
-class DatabaseCatalogHelper (context: Context) :
-    SQLiteOpenHelper(context, "catalog.db", null, 1) {
+class DatabaseCatalogHelper (private val appContext: Context) :
+    SQLiteOpenHelper(appContext, "catalog.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
@@ -77,6 +77,12 @@ class DatabaseCatalogHelper (context: Context) :
             null,
             values
     )
+
+        appContext.openOrCreateDatabase(
+            database.fileName,
+            Context.MODE_PRIVATE,
+            null
+        ).close()
 
     return database
 
