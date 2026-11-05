@@ -29,7 +29,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun DatabaseHomeScreen() {
-    val databases = remember { mutableStateListOf<String>() }
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val catalog = remember { DatabaseCatalogHelper(context) }
+
+    var databases by remember {
+        mutableStateOf(catalog.getAllDatabases())
+    }
     var showDialog by remember { mutableStateOf(false)}
     var databaseName by remember { mutableStateOf("") }
 
@@ -75,7 +80,7 @@ fun DatabaseHomeScreen() {
                                 .padding(vertical = 5.dp)
                         ) {
                             Text(
-                                text = database,
+                                text = database.name,
                                 modifier = Modifier.padding(20.dp)
                             )
                         }
@@ -105,7 +110,8 @@ fun DatabaseHomeScreen() {
                 TextButton(
                     onClick = {
                         if (databaseName.isNotBlank()) {
-                            databases.add(databaseName.trim())
+                            catalog.addDatabase(databaseName.trim())
+                            databases = catalog.getAllDatabases()
                             databaseName = ""
                             showDialog = false
                         }
