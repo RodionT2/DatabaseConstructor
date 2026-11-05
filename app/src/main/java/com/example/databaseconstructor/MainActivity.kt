@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.clickable
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,9 @@ fun DatabaseHomeScreen() {
     var databases by remember {
         mutableStateOf(catalog.getAllDatabases())
     }
+    var selectedDatabase by remember {
+        mutableStateOf<DatabaseInfo?>(null)
+    }
     var showDialog by remember { mutableStateOf(false)}
     var databaseName by remember { mutableStateOf("") }
 
@@ -42,52 +46,66 @@ fun DatabaseHomeScreen() {
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(20.dp)
-        ) {
-            Text(
-                text = "Мои базы данных",
-                style = MaterialTheme.typography.headlineMedium
-            )
+        if (selectedDatabase == null) {
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = { showDialog = true },
-                modifier = Modifier.fillMaxWidth()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(20.dp)
             ) {
-                Text("Создать базу данных")
-            }
+                Text(
+                    text = "Мои базы данных",
+                    style = MaterialTheme.typography.headlineMedium
+                )
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-            if (databases.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                Button(
+                    onClick = { showDialog = true },
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("У вас пока нет баз данных")
+                    Text("Создать базу данных")
                 }
-            } else {
-                LazyColumn {
-                    items(databases) { database ->
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 5.dp)
-                        ) {
-                            Text(
-                                text = database.name,
-                                modifier = Modifier.padding(20.dp)
-                            )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                if (databases.isEmpty()) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("У вас пока нет баз данных")
+                    }
+                } else {
+                    LazyColumn {
+                        items(databases) { database ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 5.dp)
+                                    .clickable {
+                                        selectedDatabase = database
+                                    }
+                            ) {
+                                Text(
+                                    text = database.name,
+                                    modifier = Modifier.padding(20.dp)
+                                )
+                            }
                         }
                     }
                 }
             }
+        } else {
+            DatabaseScreen(
+                database = selectedDatabase!!,
+                onBack = {
+                    selectedDatabase = null
+                }
+            )
         }
+
     }
 
     if (showDialog) {
