@@ -46,6 +46,7 @@ fun DatabaseHomeScreen() {
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
 
+                                     // Вызываем главное меню
         if (selectedDatabase == null) {
 
             Column(
@@ -84,6 +85,7 @@ fun DatabaseHomeScreen() {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 5.dp)
+                                                // Изменяем selectedDatabase, и переходим на else
                                     .clickable {
                                         selectedDatabase = database
                                     }
@@ -97,9 +99,12 @@ fun DatabaseHomeScreen() {
                     }
                 }
             }
-        } else {
+        }
+                              // Вызываем интерфейс БД
+        else {
             DatabaseScreen(
                 database = selectedDatabase!!,
+                              // Изменяем selectedDatabase и переходим на главное меню
                 onBack = {
                     selectedDatabase = null
                 }
@@ -108,6 +113,7 @@ fun DatabaseHomeScreen() {
 
     }
 
+                               // Модальное окно (блокирует интерфейс) для создания БД
     if (showDialog) {
         AlertDialog(
             onDismissRequest = {

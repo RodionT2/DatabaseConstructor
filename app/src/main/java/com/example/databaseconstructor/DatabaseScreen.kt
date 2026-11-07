@@ -1,4 +1,4 @@
-// Экран для БД
+// Интерфейс БД
 
 package com.example.databaseconstructor
 
@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DatabaseScreen(
     database: DatabaseInfo,
-    onBack: () -> Unit
+    onBack: () -> Unit // Использование другой функции в качестве параметра
 ) {
     Column(
         modifier = Modifier
@@ -25,6 +25,13 @@ fun DatabaseScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
+        Button(onClick = { }) {
+            Text("Создать таблицу")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+                    // onBack = {selectedDatabase = null} см. Main 108
         Button(onClick = onBack) {
             Text("Назад")
         }
